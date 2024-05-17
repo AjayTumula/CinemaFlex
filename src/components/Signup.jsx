@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Grid, Input } from "@mui/material";
-import './Auth.css';
+import './css/Auth.css';
 import mainImg from '../assets/img-main.png'
 import logoImg from '../assets/logo-main.png'
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function Signup() {
+
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [fullName, setFullName] = useState();
+    const navigate = useNavigate();
+
+    async function handleRegister() {
+        createUserWithEmailAndPassword(auth, email, password, fullName).then((userCredentials) => {
+           navigate('/login')
+        })
+    }
 
 
     return(
@@ -19,16 +33,23 @@ export default function Signup() {
                 <div className="login-form">
                 <img src={logoImg} style={{ marginBottom: '40px', height: '8vh', width: '45%'}}/>
                     <div className="inputs">
-                        <Input  disableUnderline placeholder="Enter Username" type='text' />
-                        <Input style={{ marginLeft: '20px'}} disableUnderline placeholder="Enter Password" type='text'/>
+                        <Input  disableUnderline placeholder="Enter Username" type='email'
+                            onChange={(e) => setEmail(e.currentTarget.value)}
+                         />
+                        <Input style={{ marginLeft: '20px'}} disableUnderline placeholder="Enter Password" type='password'
+                            onChange={(e) => setPassword(e.currentTarget.value)}
+                        />
                     </div>
-                    <Input style={{ marginTop: '2rem', width: '54%'}} disableUnderline placeholder="Enter Full Name" type='text'/>
-                    <Button  variant="contained">
+                    <Input style={{ marginTop: '2rem', width: '54%'}} disableUnderline placeholder="Enter Full Name" type='text'
+                        onChange={(e) => setFullName(e.currentTarget.value)}
+                    />
+                    <Button  variant="text" onClick={handleRegister} >
                         Join the club
                             {/* <img src={nextImg} style={{height: '20px'}} />*/}
                     </Button>
-                    <div style={{color: 'white', marginLeft: '10rem'}}>
-                    <p>Already a member? <a href='' style={{color: 'white'}}>Click here !</a></p>
+
+                    <div style={{color: 'white', marginLeft: '10rem', marginTop: '1rem'}}>
+                        Already a member? <a onClick={() => navigate('/login')} style={{color: 'white', textDecoration: 'underline', cursor: 'pointer'}}>Click here!</a>
                     </div>    
                 </div>        
             </Grid>          
