@@ -20,6 +20,7 @@ export default function Login() {
         signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
             const user = userCredentials.user;
             navigate('/home')
+            this.changeColor('white')
         }).catch((error) => {
             console.log(error)
         })

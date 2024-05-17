@@ -18,7 +18,7 @@ export default function Signup() {
 
     async function handleRegister() {
         createUserWithEmailAndPassword(auth, email, password, fullName).then((userCredentials) => {
-           navigate('/login')
+           navigate('/')
         })
     }
 
@@ -49,7 +49,7 @@ export default function Signup() {
                     </Button>
 
                     <div style={{color: 'white', marginLeft: '10rem', marginTop: '1rem'}}>
-                        Already a member? <a onClick={() => navigate('/login')} style={{color: 'white', textDecoration: 'underline', cursor: 'pointer'}}>Click here!</a>
+                        Already a member? <a onClick={() => navigate('/')} style={{color: 'white', textDecoration: 'underline', cursor: 'pointer'}}>Click here!</a>
                     </div>    
                 </div>        
             </Grid>          
