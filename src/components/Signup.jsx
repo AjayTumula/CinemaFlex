@@ -16,7 +16,8 @@ export default function Signup() {
     const [fullName, setFullName] = useState();
     const navigate = useNavigate();
 
-    async function handleRegister() {
+    async function handleRegister(e) {
+        e.preventDefault();
         createUserWithEmailAndPassword(auth, email, password, fullName).then((userCredentials) => {
            navigate('/')
         })

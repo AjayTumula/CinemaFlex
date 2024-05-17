@@ -7,15 +7,19 @@ import AppBar from '@mui/material/AppBar';
 import  imgHome  from '../assets/img-home.png'
 import Toolbar from '@mui/material/Toolbar';
 import logoHome from '../assets/logo-2.png';
+import HomeIcon from '@mui/icons-material/Home';
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 
 
 
 const Home = () => {
     const navigate = useNavigate()
 
-    async function handleLogout() {
+    async function handleLogout(e) {
+        e.preventDefault();
         signOut(auth).then((userCredentials) => {
-            navigate('/login');
+            navigate('/');
         }).catch((error) => {
             console.log(error)
         })
@@ -35,6 +39,23 @@ const Home = () => {
                   </Toolbar>                   
                 </Container>              
             </AppBar>
+            <hr />
+            <div style={{display: 'flex'}}>
+            <div style={{padding: '2rem'}}>
+                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: '#f15a24'}}>
+                    <HomeIcon fontSize="large" sx={{padding: '6px', color: 'white'}} />
+                </div>
+                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: 'blue', marginTop: '2rem', marginBottom: '2rem'}}>
+                    <ReviewsIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
+                </div>
+                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: 'blue'}}>
+                    <PermIdentityOutlinedIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
+                </div>
+            </div>
+            <div style={{borderLeft: '4px solid gray', height: '100vh', marginTop: '-10px' }}>
+            </div>
+
+            </div>
         </div>
     
     )

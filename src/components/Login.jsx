@@ -16,11 +16,10 @@ export default function Login() {
     const navigate = useNavigate();
 
 
-    async function handleLogin() {
-        signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {
-            const user = userCredentials.user;
+    async function handleLogin(e) {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {   
             navigate('/home')
-            this.changeColor('white')
         }).catch((error) => {
             console.log(error)
         })
