@@ -1,0 +1,33 @@
+body {
+    background-color: #f15a24;
+}
+
+.container {
+    display: flex;
+
+}
+
+.login-form {
+    margin: 15rem 0rem 0rem 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.login-form input {
+    border-radius: 8px;
+    background-color: white;
+    padding: 10px;
+}
+
+
+.login-form button {
+     width: 54%;
+     margin-top: 30px;
+     background: #f15a24;
+     border: 1px solid white;
+     display: flex;
+     justify-content: space-evenly;
+     text-transform: none;
+}
+
