@@ -1,8 +1,8 @@
 import { Box, Button, Container } from "@mui/material";
 import { signOut } from "firebase/auth";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import  imgHome  from '../assets/img-home.png'
 import Toolbar from '@mui/material/Toolbar';
@@ -10,19 +10,30 @@ import logoHome from '../assets/logo-2.png';
 import HomeIcon from '@mui/icons-material/Home';
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
+import Movies from "./Movies";
+import Reviews from "./Reviews";
 
 
 
 const Home = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [activeButton, setActiveButton] = useState(location.pathname.split('/')[2] || 'movies');
+    const [isClicked, setIsClicked] = useState(false)
 
     async function handleLogout(e) {
         e.preventDefault();
-        signOut(auth).then((userCredentials) => {
+        signOut(auth).then(() => {
             navigate('/');
         }).catch((error) => {
             console.log(error)
         })
+    }
+
+
+    function handleButtonClick(view) {
+        setActiveButton(view)
+        navigate(`/home/${view}`);
     }
 
     return(
@@ -35,29 +46,41 @@ const Home = () => {
                         <img src={logoHome} height={50}/>
                     </div>
                      <Button variant="contained" onClick={handleLogout}>Logout</Button>   
-
                   </Toolbar>                   
                 </Container>              
             </AppBar>
-            <hr />
+            <hr style={{marginLeft: '-8px', marginRight: '-8px'}}/>
             <div style={{display: 'flex'}}>
             <div style={{padding: '2rem'}}>
-                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: '#f15a24'}}>
-                    <HomeIcon fontSize="large" sx={{padding: '6px', color: 'white'}} />
+                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'movies' ? 'orange' : 'blue'}}
+                    onClick={() => handleButtonClick('movies')}>
+                    <HomeIcon  fontSize="large" sx={{padding: '6px', color:'white'}} />
                 </div>
-                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: 'blue', marginTop: '2rem', marginBottom: '2rem'}}>
+                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'reviews' ? 'orange' : 'blue',
+                 marginTop: '2rem', marginBottom: '2rem'}}
+                 onClick={() => handleButtonClick('reviews')}>
                     <ReviewsIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
                 </div>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: 'blue'}}>
                     <PermIdentityOutlinedIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
                 </div>
             </div>
-            <div style={{borderLeft: '4px solid gray', height: '100vh', marginTop: '-10px' }}>
+            <div style={{borderLeft: '2px solid gray', height: '100vh', marginTop: '-10px' }}>
             </div>
 
+            <div style={{padding: '2rem', flex: 1}}>
+                <Routes> 
+                    <Route path="movies" element={<Movies />}/>
+                    <Route path='reviews' element={<Reviews />}/>
+                </Routes>
             </div>
+           
+
+            </div>
+            
         </div>
-    
+
+       
     )
 }
 
