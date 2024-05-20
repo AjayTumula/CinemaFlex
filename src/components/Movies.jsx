@@ -25,9 +25,6 @@ const Movies = () => {
       .then(res => {
         setMovies(res.data.results);
       })
-      .catch(err => {
-        setError("Error fetching movies: " + err.message);
-      });
   }, []);
 
   useEffect(() => {
