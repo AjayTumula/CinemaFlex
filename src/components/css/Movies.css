@@ -1,17 +1,35 @@
 
 
 .carousel-container {
-    position:unset;
 
+
+    position:unset;
+    
     .react-multiple-carousel__arrow {
         position:absolute;
     }
 
+
     .react-multiple-carousel__arrow--left {
-        left: calc(-3% + 1px)
+        left: calc(-3% + 2px)
     }
 
     .react-multiple-carousel__arrow--right {
-        right: calc(-3% + 1px)
+        right: calc(-3% + 2px)
     }
+
 }
+
+.carousel-item {
+    display: flex;
+    flex-direction: column; 
+    /* width: auto; */
+    align-items: center;
+    padding: 1px;
+  }
+  
+  .carousel-item img {
+    max-height: auto;
+    width: 200px;
+    border-radius: 30px;
+  }

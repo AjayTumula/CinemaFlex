@@ -30,12 +30,9 @@ const Home = () => {
     }
 
 
-    // function handleButtonClick(view) {   
-    //     setActiveButton(view)
-    //     navigate(`/home/${view}`);
-    // }
 
-    const handleButtonClick = (button) => {
+    const handleButtonClick = (event, button) => {
+        event.preventDefault();
         setActiveButton(button);
         navigate(`/home/${button}`);
       };
@@ -57,19 +54,19 @@ const Home = () => {
             <div style={{display: 'flex'}}>
             <div style={{padding: '2rem'}}>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'movies' ? 'orange' : 'blue'}}
-                    onClick={() =>  handleButtonClick('movies')}>
+                    onClick={(event) =>  handleButtonClick(event, 'movies')}>
                     <HomeIcon  fontSize="large" sx={{padding: '6px', color:'white'}} />
                 </div>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'reviews' ? 'orange' : 'blue',
                  marginTop: '2rem', marginBottom: '2rem'}}
-                 onClick={() => handleButtonClick('reviews')}>
+                 onClick={(event) => handleButtonClick(event, 'reviews')}>
                     <ReviewsIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
                 </div>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: 'blue'}}>
                     <PermIdentityOutlinedIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
                 </div>
             </div>
-            <div style={{borderLeft: '2px solid gray', height: '100vh', marginTop: '-10px' }}>
+            <div style={{borderLeft: '2px solid gray', height: 'auto', marginTop: '-10px' }}>
             </div>
 
           
