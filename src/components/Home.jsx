@@ -19,8 +19,7 @@ const Home = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeButton, setActiveButton] = useState(location.pathname.split('/')[2] || 'movies');
-    const [isClicked, setIsClicked] = useState(false)
-
+    
     async function handleLogout(e) {
         e.preventDefault();
         signOut(auth).then(() => {
@@ -31,10 +30,15 @@ const Home = () => {
     }
 
 
-    function handleButtonClick(view) {
-        setActiveButton(view)
-        navigate(`/home/${view}`);
-    }
+    // function handleButtonClick(view) {   
+    //     setActiveButton(view)
+    //     navigate(`/home/${view}`);
+    // }
+
+    const handleButtonClick = (button) => {
+        setActiveButton(button);
+        navigate(`/home/${button}`);
+      };
 
     return(
         <div className="home-page">
@@ -53,7 +57,7 @@ const Home = () => {
             <div style={{display: 'flex'}}>
             <div style={{padding: '2rem'}}>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'movies' ? 'orange' : 'blue'}}
-                    onClick={() => handleButtonClick('movies')}>
+                    onClick={() =>  handleButtonClick('movies')}>
                     <HomeIcon  fontSize="large" sx={{padding: '6px', color:'white'}} />
                 </div>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'reviews' ? 'orange' : 'blue',
@@ -68,14 +72,14 @@ const Home = () => {
             <div style={{borderLeft: '2px solid gray', height: '100vh', marginTop: '-10px' }}>
             </div>
 
-            <div style={{padding: '2rem', flex: 1}}>
-                <Routes> 
-                    <Route path="movies" element={<Movies />}/>
-                    <Route path='reviews' element={<Reviews />}/>
+          
+            <div style={{}}>
+                <Routes>
+                    <Route path="movies" element={<Movies />} />
+                    <Route path="reviews" element={<Reviews />} />
                 </Routes>
             </div>
-           
-
+            
             </div>
             
         </div>
