@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { Paper } from "@mui/material";
+import './css/Movies.css'
 
 
 const MOVIE_NOW_PLAYING_API = 'https://api.themoviedb.org/3/movie/now_playing?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US&page=1';
@@ -28,27 +28,26 @@ const Movies = () => {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
       items: 7,
-      slidesToSlide: 1 // optional, default to 1.
+      slidesToSlide: 1 
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
       items: 2,
-      slidesToSlide: 2 // optional, default to 1.
+      slidesToSlide: 2 
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
       items: 1,
-      slidesToSlide: 1 // optional, default to 1.
+      slidesToSlide: 1
     }
   };
 
   
-
-
+  
     return(
-      <div style={{ padding: "20px" }}>
+      <div style={{ marginLeft: '35px', padding: "15px",  maxWidth: "87vw" }}>
       <h1 style={{ marginLeft: "15px" }}>Now Playing</h1>
-      <div style={{ maxWidth: "90vw", margin: "0 auto" }}> {/* Adjust width as needed */}
+      <div style={{    position: 'relative' }}> 
       <Carousel
           swipeable={false}
           draggable={false}
@@ -63,7 +62,7 @@ const Movies = () => {
           removeArrowOnDeviceType={["tablet", "mobile"]}
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item"
-          
+          arrows={true} 
         >
           {movies.map((movie) => (
             <div key={movie.id} style={{ padding: "10px", border: 'none' }}>
@@ -76,6 +75,7 @@ const Movies = () => {
             </div>
           ))}
         </Carousel>
+       
       </div>
     </div>
         
