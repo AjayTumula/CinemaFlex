@@ -12,6 +12,7 @@ import ReviewsIcon from '@mui/icons-material/Reviews';
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import Movies from "./Movies";
 import Reviews from "./Reviews";
+import ReadMore from "./ReadMore";
 
 
 
@@ -73,7 +74,7 @@ const Home = () => {
             <div style={{}}>
                 <Routes>
                     <Route path="movies" element={<Movies />} />
-                    <Route path="reviews" element={<Reviews />} />
+                    <Route path="reviews/*" element={<Reviews />} /> 
                 </Routes>
             </div>
             
