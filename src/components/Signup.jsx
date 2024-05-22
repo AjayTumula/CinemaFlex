@@ -6,6 +6,7 @@ import logoImg from '../assets/logo-main.png'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import Home from "./Home";
 
 
 
@@ -53,7 +54,8 @@ export default function Signup() {
                         Already a member? <a onClick={() => navigate('/')} style={{color: 'white', textDecoration: 'underline', cursor: 'pointer'}}>Click here!</a>
                     </div>    
                 </div>        
-            </Grid>          
+            </Grid> 
+            <Home fullName={fullName} />         
         </div>
     )
 }

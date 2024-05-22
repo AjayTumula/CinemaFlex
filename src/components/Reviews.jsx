@@ -8,7 +8,7 @@ import ReadMore from "./ReadMore";
 const MOVIE_API = 'https://api.themoviedb.org/3/movie/popular?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US&page=1';
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
 
-const Reviews = () => {
+const Reviews = ({fullName}) => {
 
     const [movies, setMovies] = useState([]);
     const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { Button, Rating, Typography} from "@mui/material";
+import { Button, Card, CardContent, Rating, Typography} from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
@@ -17,18 +17,19 @@ import { db } from "../firebase";
 
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
 
-const ReadMore = () => {
+const ReadMore = ({ fullName }) => {
 
     const location = useLocation();
     const {id, title, poster_path} = location.state.movie;
     const [ crewData, setCrewData ] = useState([]);
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [open, setOpen] = React.useState(false);
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(null);
     const [inputValue, setInputValue] = useState('');
     const [fullWidth, setFullWidth] = React.useState(true);
     const [maxWidth, setMaxWidth] = React.useState('sm');
     const [ reviewText, setReviewText ] = useState('');
+    
 
     
     const handleClickOpen = () => {
@@ -38,14 +39,14 @@ const ReadMore = () => {
     const handleClose = () => {
         setOpen(false);
         setInputValue('');
-        setValue(null);
+        // setValue(null);
     };
     
     const handleInputChange = (event) => {
         const newValue = event.target.value;
         if (newValue === '' || (newValue >= 1 && newValue <= 5)) {
           setInputValue(newValue);
-          setValue(Number(newValue)); 
+        
         }
     };
 
@@ -56,9 +57,11 @@ const ReadMore = () => {
         const formJson = Object.fromEntries(formData.entries());
         const text = formJson.text;
     
-        if (value >= 1 && value <= 5) {
+        if (inputValue >= 1 && inputValue <= 5) {
+          setValue(Number(inputValue)); 
+          setReviewText(text);
           console.log('Review:', text);
-          console.log('Rating:', value);
+          console.log('Rating:', inputValue);
           handleClose();
         } else {
           alert('Please enter a value between 1 and 5');
@@ -85,8 +88,8 @@ const ReadMore = () => {
     const dbReviewsFunction = async() => {
        const collectionReference = collection(db, "reviews");
        addDoc(collectionReference, {
-        user_name: "Mike",
-        review_text: "This is the review added",
+        user_name: {id},
+        review_text: {reviewText},
         level: 5
        }).then(response => {
         console.log(response)
@@ -94,7 +97,8 @@ const ReadMore = () => {
         console.log(err)
        })
     }
-    dbReviewsFunction()
+    // dbReviewsFunction()
+    
    })
  
 
@@ -133,8 +137,9 @@ const ReadMore = () => {
                             type="text"
                             fullWidth
                             variant="standard"
-                            onChange={(e) => setReviewText(e.currentTarget.value)}
+                        
                         />
+                        
                         <Typography component="legend" style={{ marginTop: '20px' }}>
                             Rating{' '}
                             <input
@@ -146,14 +151,7 @@ const ReadMore = () => {
                             />{' '}
                             out of 5
                         </Typography>
-                        {value !== null && (
-                            <Rating
-                            name="simple-controlled"
-                            value={value}
-                            readOnly
-                            style={{ marginTop: '10px' }}
-                            />
-                        )}
+                       
                         </DialogContent>
                         <DialogActions style={{ justifyContent: 'flex-start', marginLeft: 10 }}>
                         <Button  variant="contained" type="submit">
@@ -201,8 +199,26 @@ const ReadMore = () => {
          
             <Col style={{padding: '70px', width: '50%'}}>
             <div>
-            <h2>Reviews by Cinema Elk Users</h2>
-
+                <h2>Reviews by Cinema Elk Users</h2>
+                <Card>
+                    <CardContent>
+                        <Typography>this is name: {fullName}</Typography>
+                        <div>
+                            <Typography>{reviewText}</Typography>
+                            <div>
+                                {value !== null && (
+                                    <Rating
+                                        name="simple-controlled"
+                                        value={value}
+                                        readOnly
+                                        style={{ marginTop: '10px' }}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                       
+                    </CardContent>
+                </Card>
             </div>
             </Col>
         </Row>

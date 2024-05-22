@@ -16,7 +16,7 @@ import ReadMore from "./ReadMore";
 
 
 
-const Home = () => {
+const Home = ({fullName}) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeButton, setActiveButton] = useState(location.pathname.split('/')[2] || 'movies');
@@ -71,9 +71,9 @@ const Home = () => {
             <div style={{display: 'flex', marginLeft: '20px', width: '90%'}}>
                 <Routes>
                     <Route path="movies" element={<Movies />} />  
-                    <Route path="reviews/*" element={<Outlet />}>
+                    <Route path="reviews/*" element={<Outlet fullName={fullName}/>}>
                         <Route index element={<Reviews />} />
-                        <Route path="readmore/:id" element={<ReadMore />} />
+                        <Route path="readmore/:id" element={<ReadMore  fullName={fullName}/>} />
                     </Route>        
                 </Routes>   
             </div>
