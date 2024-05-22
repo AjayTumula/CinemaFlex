@@ -21,7 +21,7 @@ const Reviews = () => {
     }, [])
 
     const handleClick = (movie) => {
-        navigate(`/reviews/readmore/` +  movie.id, {state: {movie}})
+        navigate(`/home/reviews/readmore/${movie.id}`, {state: {movie}})
     }
 
 
@@ -51,8 +51,7 @@ const Reviews = () => {
             </Card> 
             </div>
           ))}
-          <div>
-          </div>
+
         </div>
     )
 } 

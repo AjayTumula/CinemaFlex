@@ -23,7 +23,7 @@ const Movies = () => {
   useEffect(() => {
     axios.get(MOVIE_NOW_PLAYING_API)
       .then(res => {
-        setMovies(res.data.results);
+        setMovies(res.data.results);   
       })
   }, []);
 

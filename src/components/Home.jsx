@@ -2,7 +2,7 @@ import { Box, Button, Container } from "@mui/material";
 import { signOut } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AppBar from '@mui/material/AppBar';
 import  imgHome  from '../assets/img-home.png'
 import Toolbar from '@mui/material/Toolbar';
@@ -30,8 +30,6 @@ const Home = () => {
         })
     }
 
-
-
     const handleButtonClick = (event, button) => {
         event.preventDefault();
         setActiveButton(button);
@@ -52,8 +50,8 @@ const Home = () => {
                 </Container>              
             </AppBar>
             <hr style={{marginLeft: '-8px', marginRight: '-8px'}}/>
-            <div style={{display: 'flex'}}>
-            <div style={{padding: '2rem'}}>
+            <div style={{display: 'flex', flexDirection: 'row', width: '100vw'}}>
+            <div style={{padding: '2rem', width: '5%'}}>
                 <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'movies' ? 'orange' : 'blue'}}
                     onClick={(event) =>  handleButtonClick(event, 'movies')}>
                     <HomeIcon  fontSize="large" sx={{padding: '6px', color:'white'}} />
@@ -70,12 +68,14 @@ const Home = () => {
             <div style={{borderLeft: '2px solid gray', height: 'auto', marginTop: '-10px' }}>
             </div>
 
-          
-            <div style={{}}>
+            <div style={{display: 'flex', marginLeft: '20px', width: '90%'}}>
                 <Routes>
-                    <Route path="movies" element={<Movies />} />
-                    <Route path="reviews/*" element={<Reviews />} /> 
-                </Routes>
+                    <Route path="movies" element={<Movies />} />  
+                    <Route path="reviews/*" element={<Outlet />}>
+                        <Route index element={<Reviews />} />
+                        <Route path="readmore/:id" element={<ReadMore />} />
+                    </Route>        
+                </Routes>   
             </div>
             
             </div>
