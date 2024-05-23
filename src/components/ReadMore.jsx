@@ -30,6 +30,7 @@ const ReadMore = () => {
     const [maxWidth, setMaxWidth] = React.useState('sm');
     const [ reviewText, setReviewText ] = useState('');
     const [ ratingValue, setRatingValue ] = useState();
+    const [ userDoc, setUserDoc ] = useState([]);
     
 
     
@@ -95,7 +96,7 @@ const ReadMore = () => {
                             review_text: reviewText,
                             rating: ratingValue
                         });
-                        // console.log("Data has been added");
+                        console.log("Data has been added");
                     } else {
                         console.log("User is not authenticated or reviewText/ratingValue is undefined");
                     }
@@ -112,6 +113,19 @@ const ReadMore = () => {
 
             return () => unsubscribe();
         }, [auth, reviewText, ratingValue]);
+
+
+        useEffect(() => {
+        
+            const getAllUsers = async() =>{
+            const collectionReference = collection(db, "reviews");
+            const userDocuments = await getDocs(collectionReference);
+            const users = userDocuments.docs.map(doc => doc.data());
+            console.log(users)
+            setUserDoc(users)
+        }
+            getAllUsers()
+        }, [])
    
  
     return(
@@ -211,25 +225,30 @@ const ReadMore = () => {
             <Col style={{padding: '70px', width: '50%'}}>
             <div>
                 <h2>Reviews by Cinema Elk Users</h2>
-                <Card>
-                    <CardContent>
-                        <Typography>this is name: {auth.currentUser.displayName}</Typography>
-                        <div>
-                            <Typography>{reviewText}</Typography>
-                            <div>
-                                {value !== null && (
-                                    <Rating
-                                        name="simple-controlled"
-                                        value={value}
-                                        readOnly
-                                        style={{ marginTop: '10px' }}
-                                    />
-                                )}
+                { userDoc.map((doc, index) => {
+                        return(
+                            <div key={index} style={{padding: '10px'}}>
+                                <Card>
+                                <CardContent>
+                                <Typography>{doc.review_text}</Typography>
+                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                    <Typography>{doc.user_name} </Typography>
+                                        <div>
+                                            {inputValue !== null && (
+                                                <Rating
+                                                    name="simple-controlled"
+                                                    value={parseInt(doc.rating)}
+                                                    readOnly
+                                                    style={{ marginTop: '10px' }}
+                                                />
+                                            )}
+                                        </div>
+                                    </div>
+                                </CardContent>
+                                </Card>
                             </div>
-                        </div>
-                       
-                    </CardContent>
-                </Card>
+                        )
+                    })}
             </div>
             </Col>
         </Row>
