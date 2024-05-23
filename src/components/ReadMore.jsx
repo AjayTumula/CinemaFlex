@@ -17,10 +17,10 @@ import { db } from "../firebase";
 
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
 
-const ReadMore = ({ fullName }) => {
+const ReadMore = () => {
 
     const location = useLocation();
-    const {id, title, poster_path} = location.state.movie;
+    const { movie, fullName } = location.state || {}; 
     const [ crewData, setCrewData ] = useState([]);
     const [ similarMovies, setSimilarMovies ] = useState([]);
     const [open, setOpen] = React.useState(false);
@@ -69,7 +69,7 @@ const ReadMore = ({ fullName }) => {
       };
 
    useEffect(() => {
-    const CAST_CREW_API = `https://api.themoviedb.org/3/movie/${id}/credits?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US`;
+    const CAST_CREW_API = `https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US`;
     axios.get(CAST_CREW_API)
     .then((res) => {
         setCrewData(res.data.cast)
@@ -77,7 +77,7 @@ const ReadMore = ({ fullName }) => {
    }, [])
 
    useEffect(() => {
-    const SIMILAR_MOVIES_API = `https://api.themoviedb.org/3/movie/${id}/similar?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US`;
+    const SIMILAR_MOVIES_API = `https://api.themoviedb.org/3/movie/${movie.id}/similar?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US`;
     axios.get(SIMILAR_MOVIES_API)
     .then((res) => {
         setSimilarMovies(res.data.results)
@@ -88,7 +88,7 @@ const ReadMore = ({ fullName }) => {
     const dbReviewsFunction = async() => {
        const collectionReference = collection(db, "reviews");
        addDoc(collectionReference, {
-        user_name: {id},
+        user_name: {},
         review_text: {reviewText},
         level: 5
        }).then(response => {
@@ -101,14 +101,13 @@ const ReadMore = ({ fullName }) => {
     
    })
  
-
     return(
         <div>
         <Row style={{display: 'flex', width: '80vw'}}>
           <Col style={{padding: '70px', width: '50%'}}>
             <div style={{display: 'flex', flexDirection: 'column'}} >
-                <img style={{height: 400, width: 400 }} src={IMAGE_API + poster_path } />
-                <div style={{marginTop: 40, fontSize: '1.5rem'}}>{title}</div>
+                <img style={{height: 400, width: 400 }} src={IMAGE_API + movie.poster_path } />
+                <div style={{marginTop: 40, fontSize: '1.5rem'}}>{movie.title}</div>
                 <div>
 
                 <React.Fragment>

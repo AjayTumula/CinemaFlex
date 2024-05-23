@@ -6,7 +6,8 @@ import logoImg from '../assets/logo-main.png'
 import nextImg from '../assets/next.png';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+
 
 
 export default function Login() {
@@ -14,12 +15,15 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const fullName = location.state?.fullName || '';
 
 
     async function handleLogin(e) {
         e.preventDefault();
         signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {   
-            navigate('/home')
+            navigate('/home', {state: {fullName}})
+            console.log(fullName)
         }).catch((error) => {
             console.log(error)
         })
@@ -49,7 +53,8 @@ export default function Login() {
                         Join the club, <a onClick={() => navigate('/signup')} style={{color: 'white', textDecoration: 'underline', cursor: 'pointer'}}>Click here!</a>
                     </div>    
                 </div>        
-            </Grid>          
+            </Grid>    
+           
         </div>
     )
 }

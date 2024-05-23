@@ -1,17 +1,21 @@
 import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ReadMore from "./ReadMore";
+
 
 
 const MOVIE_API = 'https://api.themoviedb.org/3/movie/popular?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US&page=1';
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
 
-const Reviews = ({fullName}) => {
+const Reviews = () => {
 
     const [movies, setMovies] = useState([]);
     const navigate = useNavigate();
+    const location = useLocation();
+    const fullName = location.state?.fullName || '';
+
 
     useEffect(() => {
         axios.get(MOVIE_API)
@@ -21,7 +25,8 @@ const Reviews = ({fullName}) => {
     }, [])
 
     const handleClick = (movie) => {
-        navigate(`/home/reviews/readmore/${movie.id}`, {state: {movie}})
+        navigate(`/home/reviews/readmore/${movie.id}`, {state: {movie, fullName}})
+        console.log(fullName)
     }
 
 
@@ -34,8 +39,8 @@ const Reviews = ({fullName}) => {
                     <CardContent>
                         <Typography>Person Name</Typography>
                         <hr />
-                        <div>Rating {movie.title}</div>
-                        <Typography style={{marginTop: '10px'}}>This is Review dfgdgh</Typography>
+                        <div>Rating {movie.title} {fullName}</div>
+                        <Typography style={{marginTop: '10px'}}>This is Review </Typography>
                         <div style={{marginTop: '90px'}}> 
                             <Button variant="contained"
                             onClick={() => handleClick(movie)}>
@@ -50,8 +55,7 @@ const Reviews = ({fullName}) => {
                 />
             </Card> 
             </div>
-          ))}
-
+          ))}        
         </div>
     )
 } 

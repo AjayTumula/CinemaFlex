@@ -6,7 +6,7 @@ import logoImg from '../assets/logo-main.png'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import Home from "./Home";
+import Login from "./Login";
 
 
 
@@ -14,13 +14,14 @@ export default function Signup() {
 
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [fullName, setFullName] = useState();
+    const [fullName, setFullName] = useState('');
     const navigate = useNavigate();
 
     async function handleRegister(e) {
         e.preventDefault();
         createUserWithEmailAndPassword(auth, email, password, fullName).then((userCredentials) => {
-           navigate('/')
+           navigate('/', {state: {fullName}})
+           console.log(fullName)
         })
     }
 
@@ -54,8 +55,7 @@ export default function Signup() {
                         Already a member? <a onClick={() => navigate('/')} style={{color: 'white', textDecoration: 'underline', cursor: 'pointer'}}>Click here!</a>
                     </div>    
                 </div>        
-            </Grid> 
-            <Home fullName={fullName} />         
+            </Grid>       
         </div>
     )
 }

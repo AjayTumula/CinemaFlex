@@ -16,10 +16,11 @@ import ReadMore from "./ReadMore";
 
 
 
-const Home = ({fullName}) => {
+const Home = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeButton, setActiveButton] = useState(location.pathname.split('/')[2] || 'movies');
+    const fullName  = location.state?.fullName || '';
     
     async function handleLogout(e) {
         e.preventDefault();
@@ -33,7 +34,8 @@ const Home = ({fullName}) => {
     const handleButtonClick = (event, button) => {
         event.preventDefault();
         setActiveButton(button);
-        navigate(`/home/${button}`);
+        navigate(`/home/${button}`, {state: {fullName}});
+        console.log(fullName)
       };
 
     return(
@@ -71,14 +73,15 @@ const Home = ({fullName}) => {
             <div style={{display: 'flex', marginLeft: '20px', width: '90%'}}>
                 <Routes>
                     <Route path="movies" element={<Movies />} />  
-                    <Route path="reviews/*" element={<Outlet fullName={fullName}/>}>
+                    <Route path="reviews/*" element={<Outlet />}>
                         <Route index element={<Reviews />} />
-                        <Route path="readmore/:id" element={<ReadMore  fullName={fullName}/>} />
+                        <Route path="readmore/:id" element={<ReadMore />} />
                     </Route>        
                 </Routes>   
             </div>
             
             </div>
+          
             
         </div>
 
