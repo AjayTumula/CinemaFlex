@@ -11,11 +11,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { addDoc, collection, doc, setDoc, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 
-
-const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
+const IMAGE_API = 'https://image.tmdb.org/t/p/w500'; 
 
 const ReadMore = () => {
 
@@ -29,6 +29,7 @@ const ReadMore = () => {
     const [fullWidth, setFullWidth] = React.useState(true);
     const [maxWidth, setMaxWidth] = React.useState('sm');
     const [ reviewText, setReviewText ] = useState('');
+    const [ ratingValue, setRatingValue ] = useState();
     
 
     
@@ -39,14 +40,12 @@ const ReadMore = () => {
     const handleClose = () => {
         setOpen(false);
         setInputValue('');
-        // setValue(null);
     };
     
     const handleInputChange = (event) => {
         const newValue = event.target.value;
         if (newValue === '' || (newValue >= 1 && newValue <= 5)) {
           setInputValue(newValue);
-        
         }
     };
 
@@ -60,6 +59,7 @@ const ReadMore = () => {
         if (inputValue >= 1 && inputValue <= 5) {
           setValue(Number(inputValue)); 
           setReviewText(text);
+          setRatingValue(inputValue);
           console.log('Review:', text);
           console.log('Rating:', inputValue);
           handleClose();
@@ -84,22 +84,35 @@ const ReadMore = () => {
     })
    }, []);
 
-   useEffect(() => {
-    const dbReviewsFunction = async() => {
-       const collectionReference = collection(db, "reviews");
-       addDoc(collectionReference, {
-        user_name: {},
-        review_text: {reviewText},
-        level: 5
-       }).then(response => {
-        console.log(response)
-       }).catch(err => {
-        console.log(err)
-       })
-    }
-    // dbReviewsFunction()
-    
-   })
+        useEffect(() => {
+            const addUserReview = async () => {
+                try {
+                    const user = auth.currentUser;
+                    if (user && reviewText !== undefined && ratingValue !== undefined) {
+                        const documentReference = doc(db, "reviews", user.displayName);
+                        await setDoc(documentReference, {
+                            user_name: user.displayName,
+                            review_text: reviewText,
+                            rating: ratingValue
+                        });
+                        // console.log("Data has been added");
+                    } else {
+                        console.log("User is not authenticated or reviewText/ratingValue is undefined");
+                    }
+                } catch (err) {
+                    console.log("Error setting document:", err);
+                }
+            };
+
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    addUserReview();
+                }
+            });
+
+            return () => unsubscribe();
+        }, [auth, reviewText, ratingValue]);
+   
  
     return(
         <div>
@@ -136,7 +149,6 @@ const ReadMore = () => {
                             type="text"
                             fullWidth
                             variant="standard"
-                        
                         />
                         
                         <Typography component="legend" style={{ marginTop: '20px' }}>
@@ -201,7 +213,7 @@ const ReadMore = () => {
                 <h2>Reviews by Cinema Elk Users</h2>
                 <Card>
                     <CardContent>
-                        <Typography>this is name: {fullName}</Typography>
+                        <Typography>this is name: {auth.currentUser.displayName}</Typography>
                         <div>
                             <Typography>{reviewText}</Typography>
                             <div>
@@ -221,8 +233,6 @@ const ReadMore = () => {
             </div>
             </Col>
         </Row>
-   
-        
         </div>
     )
 }

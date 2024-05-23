@@ -20,7 +20,7 @@ const Home = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [activeButton, setActiveButton] = useState(location.pathname.split('/')[2] || 'movies');
-    const fullName  = location.state?.fullName || '';
+    // const fullName  = location.state?.fullName || '';
     
     async function handleLogout(e) {
         e.preventDefault();
@@ -34,8 +34,8 @@ const Home = () => {
     const handleButtonClick = (event, button) => {
         event.preventDefault();
         setActiveButton(button);
-        navigate(`/home/${button}`, {state: {fullName}});
-        console.log(fullName)
+        navigate(`/home/${button}`);
+       
       };
 
     return(

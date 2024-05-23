@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, Input } from "@mui/material";
 import './css/Auth.css';
 import mainImg from '../assets/img-main.png'
 import logoImg from '../assets/logo-main.png'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import Login from "./Login";
+
 
 
 
@@ -19,12 +19,38 @@ export default function Signup() {
 
     async function handleRegister(e) {
         e.preventDefault();
-        createUserWithEmailAndPassword(auth, email, password, fullName).then((userCredentials) => {
-           navigate('/', {state: {fullName}})
-           console.log(fullName)
+        await createUserWithEmailAndPassword(auth, email, password, fullName).then((userCredentials) => {
+           if (auth.currentUser) {
+            updateProfile(auth.currentUser, {
+            displayName: fullName,
+            }).then(() => {
+            console.log('Profile updated!');
+            navigate('/', { state: { fullName } });
+            }).catch((error) => {
+            console.error('Error updating profile:', error);
+            });
+        }
         })
+        
     }
+ 
 
+
+    // async function handleRegister(e) {
+    //     e.preventDefault();
+    //     try {
+    //         const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+    //         if (userCredentials.user) {
+    //             await updateProfile(userCredentials.user, { displayName: fullName });
+    //             navigate('/', { state: { fullName } });
+    //         }
+    //     } catch (error) {
+    //         console.error('Error registering user:', error);
+            
+    //     }
+    // }
+    
+   
 
     return(
         <div className="container">
@@ -44,7 +70,8 @@ export default function Signup() {
                         />
                     </div>
                     <Input style={{ marginTop: '2rem', width: '54%'}} disableUnderline placeholder="Enter Full Name" type='text'
-                        onChange={(e) => setFullName(e.currentTarget.value)}
+                        value={fullName}
+                        onChange={(e) => { setFullName(e.currentTarget.value)}}
                     />
                     <Button  variant="text" onClick={handleRegister} >
                         Join the club

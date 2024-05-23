@@ -1,10 +1,10 @@
 import { Button, Grid, Input } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './css/Auth.css';
 import mainImg from '../assets/img-main.png'
 import logoImg from '../assets/logo-main.png'
 import nextImg from '../assets/next.png';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,13 +21,14 @@ export default function Login() {
 
     async function handleLogin(e) {
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {   
+        signInWithEmailAndPassword(auth, email, password).then((userCredentials) => {  
             navigate('/home', {state: {fullName}})
-            console.log(fullName)
         }).catch((error) => {
             console.log(error)
         })
     }
+  
+    
 
     return(
         <div className="container">
