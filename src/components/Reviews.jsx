@@ -1,9 +1,10 @@
 import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import axios from "axios";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const MOVIE_API = 'https://api.themoviedb.org/3/movie/popular?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US&page=1';
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
@@ -12,33 +13,43 @@ const Reviews = () => {
 
     const [movies, setMovies] = useState([]);
     const navigate = useNavigate();
-    const location = useLocation();
-    // const fullName = location.state?.fullName || '';
+    const [ userReview, setUserReview ] = useState([]);
 
 
     useEffect(() => {
         axios.get(MOVIE_API)
         .then((res) => {
             setMovies(res.data.results)
-         
         })
     }, [])
 
     const handleClick = (movie) => {
        navigate(`/home/reviews/readmore/${movie.id}`, { state: { movie } });
 
- 
        const addMovie = async() => {       
         const documentReference = doc(db, "movie", `${movie.id}`);
             setDoc(documentReference, {
                 movie_id: movie.id,
             });
         }
-        addMovie()
+        addMovie();
+     
     }  
-    
 
+    useEffect(() => {
+        const getUser = async() => {
+            
+                const reviewRef = collection(db, "reviews");
+                const userDocs = await getDocs(reviewRef);
+                userDocs.forEach((user) => {
+                    // console.log(user.data());
+                })
+            
+        }
+        getUser()
+    })
 
+ 
     return(
         <div style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
             {movies.map((movie) => (     

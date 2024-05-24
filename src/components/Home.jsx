@@ -13,6 +13,7 @@ import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import Movies from "./Movies";
 import Reviews from "./Reviews";
 import ReadMore from "./ReadMore";
+import Profile from "./Profile";
 
 
 
@@ -63,7 +64,8 @@ const Home = () => {
                  onClick={(event) => handleButtonClick(event, 'reviews')}>
                     <ReviewsIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
                 </div>
-                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: 'blue'}}>
+                <div style={{height: '3rem', width: '3rem', borderRadius: '50%', backgroundColor: activeButton === 'profile' ? 'orange' : 'blue'}}
+                onClick={(event) => handleButtonClick(event, 'profile')}>
                     <PermIdentityOutlinedIcon fontSize="large" sx={{padding: '6px', color: 'white'}}/>
                 </div>
             </div>
@@ -76,7 +78,8 @@ const Home = () => {
                     <Route path="reviews/*" element={<Outlet />}>
                         <Route index element={<Reviews />} />
                         <Route path="readmore/:id" element={<ReadMore />} />
-                    </Route>        
+                    </Route>    
+                    <Route path="profile" element={<Profile />} />      
                 </Routes>   
             </div>
             

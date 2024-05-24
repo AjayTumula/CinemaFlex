@@ -10,7 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { addDoc, collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, getDocs, query, where, writeBatch } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -117,18 +117,55 @@ const ReadMore = () => {
             return () => unsubscribe();
         }, [auth, reviewText, ratingValue]);
 
+
+        useEffect(() => {
+            const addUser = async () => {
+                try {
+                   
+                    const user = auth.currentUser;
+                    console.log(user.displayName)
+                    
+                    if (user && reviewText !== undefined && ratingValue !== undefined) {
+                        
+                        const collectionReference = doc(db, "review", user.displayName)
+                        await setDoc(collectionReference, {
+                            user_name: user.displayName,
+                            review_text: reviewText,
+                            rating: ratingValue,    
+                            movie_id: movie.id,
+                            user_id: user.uid,
+                        });
+                        console.log(`Data has been added to  reviews` );
+                    } else {
+                        console.log("User is not authenticated or reviewText/ratingValue is undefined");
+                    }
+                } catch (err) {
+                    console.log("Error setting document:", err);
+                }
+            };
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    addUser();
+                }
+            });
+
+            return () => unsubscribe();
+        }, [auth, reviewText, ratingValue]);
         
 
         useEffect(() => {
             const getUserReviews = async () => {
                 try {
                     const reviewsCollectionRef = collection(db, "movie", `${movie.id}`, "users");
-                    const querySnapshot = await getDocs(query(reviewsCollectionRef, where("movie_id", "==", `${movie.id}`)));
+                    const querySnapshot = await getDocs(reviewsCollectionRef);
                     const reviews = [];
                     querySnapshot.forEach((doc) => {
+                        // console.log(doc.data())
                         reviews.push(doc.data());
+                       
                     });
                     setUserDoc(reviews);
+                    // console.log(reviews)
                 } catch (error) {
                     console.error("Error fetching user reviews:", error);
                 }
@@ -249,7 +286,7 @@ const ReadMore = () => {
                                 <Card>
                                 <CardContent>
                                 <Typography>{doc.review_text}</Typography>
-                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10}}>
                                     <Typography>{doc.user_name} </Typography>
                                         <div>
                                             {inputValue !== null && (
