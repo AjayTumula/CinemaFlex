@@ -6,12 +6,11 @@ import { useLocation } from "react-router-dom";
 
 
 
+const IMAGE_API = 'https://image.tmdb.org/t/p/w500'; 
 
 const Profile = () => {
 
-  
     const [ movieId, setMovieId ]  = useState([])
-
 
     useEffect(() => {
         const getAllUsers = async() => {
@@ -23,7 +22,7 @@ const Profile = () => {
                 
             })
             setMovieId(users);
-            console.log(users)
+            // console.log(users)
         }
         getAllUsers()
     }, [])
@@ -32,15 +31,16 @@ const Profile = () => {
 
     return(
         <div style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
-            {/* {movies.map((movie) => (      */}
-            <div  style={{padding: '10px'}}>
+            {movieId.map((movie) => (     
+            <div key={movie.movie_id} style={{padding: '10px'}}>
             <Card style={{display: 'flex', width: 800, height: 300}}>
                 <Box style={{display: 'flex', flexDirection: 'column', width: '80%'}}>
                     <CardContent>
-                        <Typography>Person Name</Typography>
+                    
+                        <Typography>{movie.user_name}</Typography>
                         <hr />
-                        <div>Rating  </div>
-                        <Typography style={{marginTop: '10px'}}>This is Review </Typography>
+                        <div>{movie.rating}</div>
+                        <Typography style={{marginTop: '10px'}}>{movie.review_text}</Typography>
                         <div style={{marginTop: '90px'}}> 
                             <Button variant="contained"
                             onClick={() => handleClick()}>
@@ -50,12 +50,12 @@ const Profile = () => {
                 </Box>
                 <CardMedia 
                     component="img"
-                    // src={IMAGE_API + movie.poster_path}
+                    src={IMAGE_API + movie.poster_path}
                     style={{height: 300, width: 300}}
                 />
             </Card> 
             </div>
-          {/* ))}         */}
+          ))}        
         </div>
     )
 }

@@ -99,6 +99,7 @@ const ReadMore = () => {
                             rating: ratingValue,    
                             movie_id: movie.id,
                             user_id: user.uid,
+                            poster_path: movie.poster_path,
                         });
                         console.log(`Data has been added to  ${movie.id}` );
                     } else {
@@ -134,6 +135,7 @@ const ReadMore = () => {
                             rating: ratingValue,    
                             movie_id: movie.id,
                             user_id: user.uid,
+                            poster_path: movie.poster_path,
                         });
                         console.log(`Data has been added to  reviews` );
                     } else {

@@ -14,6 +14,7 @@ import Movies from "./Movies";
 import Reviews from "./Reviews";
 import ReadMore from "./ReadMore";
 import Profile from "./Profile";
+import UserReview from "./UserReviews";
 
 
 
@@ -78,8 +79,9 @@ const Home = () => {
                     <Route path="reviews/*" element={<Outlet />}>
                         <Route index element={<Reviews />} />
                         <Route path="readmore/:id" element={<ReadMore />} />
+                        <Route path="user" element={<UserReview />} />
                     </Route>    
-                    <Route path="profile" element={<Profile />} />      
+                    <Route path="profile" element={<Profile />} />     
                 </Routes>   
             </div>
             

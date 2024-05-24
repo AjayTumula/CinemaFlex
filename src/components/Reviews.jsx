@@ -37,30 +37,39 @@ const Reviews = () => {
     }  
 
     useEffect(() => {
-        const getUser = async() => {
-            
-                const reviewRef = collection(db, "reviews");
-                const userDocs = await getDocs(reviewRef);
-                userDocs.forEach((user) => {
-                    // console.log(user.data());
-                })
-            
+        const getAllUsers = async() => {
+            const collectionReference = collection(db, "review");
+            const userDocuments = await getDocs(collectionReference);
+            const users = []
+            userDocuments.forEach((user) => {
+                users.push(user.data());
+                
+            })
+            setUserReview(users);
+            console.log(users)
         }
-        getUser()
-    })
+        getAllUsers()
+    }, [])
 
+    const handleClickUser = () => {
+        navigate(`/home/reviews/user`);
+    }
  
     return(
-        <div style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
-            {movies.map((movie) => (     
+        <div>
+        {userReview.map((user) => { 
+            return (
+            <div style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
+            {movies.map((movie) => (         
             <div key={movie.id} style={{padding: '10px'}}>
+            
             <Card style={{display: 'flex', width: 800, height: 300}}>
                 <Box style={{display: 'flex', flexDirection: 'column', width: '80%'}}>
-                    <CardContent>
-                        <Typography>Person Name</Typography>
+                    <CardContent>       
+                        <Typography onClick={() => handleClickUser()} style={{cursor: 'pointer'}}>{user.user_name}</Typography>
                         <hr />
                         <div>Rating {movie.title} </div>
-                        <Typography style={{marginTop: '10px'}}>This is Review </Typography>
+                        <Typography style={{marginTop: '10px'}}>{user.review_text} </Typography>
                         <div style={{marginTop: '90px'}}> 
                             <Button variant="contained"
                             onClick={() => handleClick(movie)}>
@@ -74,9 +83,13 @@ const Reviews = () => {
                     style={{height: 300, width: 300}}
                 />
             </Card> 
+           
             </div>
-          ))}        
-        </div>
+          ))}  
+          </div>  
+        )
+           })}    
+           </div>
     )
 } 
 
