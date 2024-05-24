@@ -10,7 +10,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { addDoc, collection, doc, setDoc, getDocs } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -40,7 +40,7 @@ const ReadMore = () => {
 
     const handleClose = () => {
         setOpen(false);
-        setInputValue('');
+        setInputValue('')
     };
     
     const handleInputChange = (event) => {
@@ -75,7 +75,7 @@ const ReadMore = () => {
     .then((res) => {
         setCrewData(res.data.cast)
     })
-   }, [])
+   }, [movie.id])
 
    useEffect(() => {
     const SIMILAR_MOVIES_API = `https://api.themoviedb.org/3/movie/${movie.id}/similar?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US`;
@@ -83,20 +83,24 @@ const ReadMore = () => {
     .then((res) => {
         setSimilarMovies(res.data.results)
     })
-   }, []);
+   }, [movie.id]);
 
         useEffect(() => {
             const addUserReview = async () => {
                 try {
                     const user = auth.currentUser;
+                    
                     if (user && reviewText !== undefined && ratingValue !== undefined) {
-                        const documentReference = doc(db, "reviews", user.displayName);
+                        
+                        const documentReference = doc(db, "movie", `${movie.id}`, "users", user.displayName)
                         await setDoc(documentReference, {
                             user_name: user.displayName,
                             review_text: reviewText,
-                            rating: ratingValue
+                            rating: ratingValue,    
+                            movie_id: movie.id,
+                            user_id: user.uid,
                         });
-                        console.log("Data has been added");
+                        console.log(`Data has been added to  ${movie.id}` );
                     } else {
                         console.log("User is not authenticated or reviewText/ratingValue is undefined");
                     }
@@ -104,7 +108,6 @@ const ReadMore = () => {
                     console.log("Error setting document:", err);
                 }
             };
-
             const unsubscribe = onAuthStateChanged(auth, (user) => {
                 if (user) {
                     addUserReview();
@@ -114,19 +117,32 @@ const ReadMore = () => {
             return () => unsubscribe();
         }, [auth, reviewText, ratingValue]);
 
+        
 
         useEffect(() => {
+            const getUserReviews = async () => {
+                try {
+                    const reviewsCollectionRef = collection(db, "movie", `${movie.id}`, "users");
+                    const querySnapshot = await getDocs(query(reviewsCollectionRef, where("movie_id", "==", `${movie.id}`)));
+                    const reviews = [];
+                    querySnapshot.forEach((doc) => {
+                        reviews.push(doc.data());
+                    });
+                    setUserDoc(reviews);
+                } catch (error) {
+                    console.error("Error fetching user reviews:", error);
+                }
+            };
+       
+            const unsubscribe = onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    getUserReviews();
+                }
+            });
+            return () => unsubscribe();
+        }, [movie.id]);
+
         
-            const getAllUsers = async() =>{
-            const collectionReference = collection(db, "reviews");
-            const userDocuments = await getDocs(collectionReference);
-            const users = userDocuments.docs.map(doc => doc.data());
-            console.log(users)
-            setUserDoc(users)
-        }
-            getAllUsers()
-        }, [])
-   
  
     return(
         <div>
@@ -153,6 +169,7 @@ const ReadMore = () => {
                     >
                         <DialogTitle>Enter Your Review Here</DialogTitle>
                         <DialogContent>
+                       
                         <TextField
                             autoFocus
                             required
@@ -163,6 +180,7 @@ const ReadMore = () => {
                             type="text"
                             fullWidth
                             variant="standard"
+                            
                         />
                         
                         <Typography component="legend" style={{ marginTop: '20px' }}>
@@ -176,10 +194,10 @@ const ReadMore = () => {
                             />{' '}
                             out of 5
                         </Typography>
-                       
+                    
                         </DialogContent>
                         <DialogActions style={{ justifyContent: 'flex-start', marginLeft: 10 }}>
-                        <Button  variant="contained" type="submit">
+                        <Button variant="contained" type="submit">
                             Submit
                         </Button>
                         </DialogActions>

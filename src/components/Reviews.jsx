@@ -1,7 +1,9 @@
 import { Box, Button, Card, CardContent, CardMedia, Typography } from "@mui/material";
 import axios from "axios";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { db } from "../firebase";
 
 const MOVIE_API = 'https://api.themoviedb.org/3/movie/popular?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US&page=1';
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
@@ -18,12 +20,23 @@ const Reviews = () => {
         axios.get(MOVIE_API)
         .then((res) => {
             setMovies(res.data.results)
+         
         })
     }, [])
 
     const handleClick = (movie) => {
-        navigate(`/home/reviews/readmore/${movie.id}`, {state: {movie}}) 
-    }
+       navigate(`/home/reviews/readmore/${movie.id}`, { state: { movie } });
+
+ 
+       const addMovie = async() => {       
+        const documentReference = doc(db, "movie", `${movie.id}`);
+            setDoc(documentReference, {
+                movie_id: movie.id,
+            });
+        }
+        addMovie()
+    }  
+    
 
 
     return(
