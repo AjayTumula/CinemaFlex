@@ -75,7 +75,8 @@ const ReadMore = () => {
     .then((res) => {
         setCrewData(res.data.cast)
     })
-   }, [movie.id])
+   }, [movie.id]);
+
 
    useEffect(() => {
     const SIMILAR_MOVIES_API = `https://api.themoviedb.org/3/movie/${movie.id}/similar?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US`;
@@ -84,6 +85,7 @@ const ReadMore = () => {
         setSimilarMovies(res.data.results)
     })
    }, [movie.id]);
+   
 
         useEffect(() => {
             const addUserReview = async () => {
