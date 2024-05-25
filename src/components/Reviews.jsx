@@ -51,22 +51,22 @@ const Reviews = () => {
         getAllUsers()
     }, [])
 
-    const handleClickUser = () => {
-        navigate(`/home/reviews/user`);
+    const handleClickUser = (movie) => {
+        navigate(`/home/reviews/user`, { state: { movie } });
     }
  
     return(
         <div>
         {userReview.map((user) => { 
             return (
-            <div style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
+            <div key={user.id} style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
             {movies.map((movie) => (         
             <div key={movie.id} style={{padding: '10px'}}>
             
             <Card style={{display: 'flex', width: 800, height: 300}}>
                 <Box style={{display: 'flex', flexDirection: 'column', width: '80%'}}>
                     <CardContent>       
-                        <Typography onClick={() => handleClickUser()} style={{cursor: 'pointer'}}>{user.user_name}</Typography>
+                        <Typography onClick={() => handleClickUser(movie)} style={{cursor: 'pointer'}}>{user.user_name}</Typography>
                         <hr />
                         <div>Rating {movie.title} </div>
                         <Typography style={{marginTop: '10px'}}>{user.review_text} </Typography>
