@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import './css/Movies.css'
@@ -18,6 +18,17 @@ const Movies = () => {
   const [popularMovies, setPopularMovies] = useState([]);
   const [topRatedMovies, setTopRatedMovies] = useState([]);
   const [upcomingMovies, setUpcomingMovies] = useState([]);
+
+  // const cardsRef = useRef();
+
+  // const handleWheel = (event) => {
+  //   event.preventDefault();
+  //   cardsRef.current.scrollLeft += event.deltaY;
+  // }
+
+  // useEffect(() => {
+  //   cardsRef.current.addEventListener("wheel", handleWheel);
+  // }, [])
   
 
   useEffect(() => {
@@ -86,7 +97,7 @@ const Movies = () => {
           showDots={false}
           responsive={responsive}
           infinite={true}
-          autoPlay={true}
+          autoPlay={false}
           keyBoardControl={true}
          
           transitionDuration={50}

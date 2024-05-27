@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
+
+// This movie api can be created as a custom hook
 const MOVIE_API = 'https://api.themoviedb.org/3/movie/popular?api_key=4fb7181c9144f34c2175940c5e895b46&language=en-US&page=1';
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500';
 
