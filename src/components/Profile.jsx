@@ -4,6 +4,8 @@ import {  React, useEffect, useState } from "react";
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Typography, Card, CardContent, Box, CardMedia } from "@mui/material";
 import { collection, doc, getDocs, setDoc, deleteDoc } from 'firebase/firestore';
 import { auth, db } from "../firebase";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 const IMAGE_API = 'https://image.tmdb.org/t/p/w500'; 
 
@@ -72,7 +74,14 @@ const Profile = () => {
     };
 
     return (
+        <div>
+        <Navbar />
+        <div style={{display: 'flex', flexDirection: 'row', width: '100vw'}}>
+        <Sidebar/>
+        <div style={{borderLeft: '2px solid gray', height: '100vh', marginTop: '-10px' }}>
+        </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', padding: '10px' }}>
+        
             {movieId.map((movie) => (
                 <div key={movie.movie_id} style={{ padding: '10px' }}>
                     <Card style={{ display: 'flex', width: 800, height: 300 }}>
@@ -131,6 +140,8 @@ const Profile = () => {
                     </DialogActions>
                 </form>
             </Dialog>
+        </div>
+        </div>
         </div>
     );
 };

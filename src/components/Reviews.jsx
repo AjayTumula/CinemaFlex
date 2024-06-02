@@ -5,6 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 
 // This movie api can be created as a custom hook
@@ -26,7 +28,7 @@ const Reviews = () => {
     }, [])
 
     const handleClick = (movie) => {
-       navigate(`/home/reviews/readmore/${movie.id}`, { state: { movie } });
+       navigate(`/reviews/${movie.id}`, { state: { movie } });
 
        const addMovie = async() => {       
         const documentReference = doc(db, "movie", `${movie.id}`);
@@ -59,9 +61,15 @@ const Reviews = () => {
  
     return(
         <div>
+        <Navbar />
+        <div style={{display: 'flex', flexWrap: 'wrap', width: '100vw'}}>
+        <Sidebar />
+        <div style={{borderLeft: '2px solid gray', height: 'auto', marginTop: '-10px' }}>
+        </div>
         {userReview.map((user) => { 
             return (
-            <div key={user.id} style={{display: 'flex', flexWrap: 'wrap', padding: '10px'}}>
+           
+            <div key={user.id} style={{ padding: '40px', margin: '70px'}}>
             {movies.map((movie) => (         
             <div key={movie.id} style={{padding: '10px'}}>
             
@@ -89,9 +97,12 @@ const Reviews = () => {
             </div>
           ))}  
           </div>  
+          
         )
            })}    
            </div>
+           </div>
+           
     )
 } 
 

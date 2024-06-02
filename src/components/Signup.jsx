@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Grid, Input } from "@mui/material";
-import './css/Auth.css';
+// import '../Auth.css';
 import mainImg from '../assets/img-main.png'
 import logoImg from '../assets/logo-main.png'
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -34,22 +34,6 @@ export default function Signup() {
         
     }
  
-
-
-    // async function handleRegister(e) {
-    //     e.preventDefault();
-    //     try {
-    //         const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-    //         if (userCredentials.user) {
-    //             await updateProfile(userCredentials.user, { displayName: fullName });
-    //             navigate('/', { state: { fullName } });
-    //         }
-    //     } catch (error) {
-    //         console.error('Error registering user:', error);
-            
-    //     }
-    // }
-    
    
 
     return(
